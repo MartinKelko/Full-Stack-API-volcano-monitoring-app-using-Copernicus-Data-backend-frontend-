@@ -1,37 +1,73 @@
-**Copernicus Backend (Volcano Monitoring)**
+# React + TypeScript + Vite
 
-I developed a lightweight Copernicus Data Space backend service that automates volcano monitoring using Sentinel-2 imagery.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-The system works with a predefined list of volcano AOIs (stored as GeoJSON polygons). On a daily basis it:
+Currently, two official plugins are available:
 
-searches the Copernicus Catalog for the most recent Sentinel-2 acquisitions (typically within the last 2 days, with an optional cloud cover filter),
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-generates false-color composites via the Copernicus Process API,
+## React Compiler
 
-saves the resulting PNG images and serves them via HTTP so they can be easily loaded into QGIS.
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-Tech stack / software
+## Expanding the ESLint configuration
 
-Python + FastAPI (REST API backend)
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
-httpx and asyncio for asynchronous processing and batch requests
+```js
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
 
-Static file hosting using FastAPI StaticFiles
+      // Remove tseslint.configs.recommended and replace with this
+      tseslint.configs.recommendedTypeChecked,
+      // Alternatively, use this for stricter rules
+      tseslint.configs.strictTypeChecked,
+      // Optionally, add this for stylistic rules
+      tseslint.configs.stylisticTypeChecked,
 
-Daily automation via a Python job script (requests, retry logic, optional **SMTP email reporting`)
+      // Other configs...
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
+```
 
-Configuration through environment variables (Copernicus OAuth credentials and job parameters)
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-Postman is used for testing and validating API endpoints during development (AOIs, scene search, false-color generation)
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
 
-API functionality
-
-AOI listing and metadata (/aois)
-
-Latest Sentinel-2 scene discovery per AOI (/aois/{id}/latest-scene)
-
-False-color image generation and retrieval (/aois/{id}/latest-fc, /aois/{id}/fc.png)
-
-Batch processing for all AOIs (/latest-scenes, /latest-fc-all)
-
-The backend is designed as a data provider for a future QGIS plugin, allowing users to access up-to-date, preprocessed satellite imagery for multiple volcanoes without manually working in the Copernicus Browser.
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+      // Enable lint rules for React
+      reactX.configs['recommended-typescript'],
+      // Enable lint rules for React DOM
+      reactDom.configs.recommended,
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
+```

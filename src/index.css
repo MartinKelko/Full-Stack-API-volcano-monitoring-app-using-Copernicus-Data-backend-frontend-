@@ -1,0 +1,22 @@
+button {
+  border-radius: 8px;
+  border: none;              /* zruší border */
+  outline: none;             /* zruší outline */
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+button:hover {
+  filter: brightness(1.05);  /* jemný hover bez rámiku */
+}
+
+button:focus,
+button:focus-visible {
+  outline: none;             /* zruší biely focus rámik */
+  box-shadow: none;          /* pre istotu */
+}
