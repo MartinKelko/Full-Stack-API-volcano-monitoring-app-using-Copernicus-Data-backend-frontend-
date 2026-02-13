@@ -1,0 +1,49 @@
+Frontend – Technologies Used
+
+The frontend is implemented as a Single Page Application (SPA) built with React and TypeScript, and bundled using Vite (fast development server and optimized production build).
+
+Mapping Component
+
+MapLibre GL JS – interactive web mapping (pan, zoom, layers, sources)
+
+Raster basemap: Esri World Imagery (tile service) integrated via a custom MapLibre style JSON
+
+Visualization of AOIs (Areas of Interest) loaded from the backend:
+
+AOI bounding boxes are converted into GeoJSON polygons
+
+AOI centers are rendered as GeoJSON point features (circle layer)
+
+AOI names are displayed as labels (symbol layer) from a defined zoom level
+
+Automatic map fitting to AOI extent using fitBounds
+
+Backend Communication
+
+Uses the native Fetch API
+
+REST endpoints:
+
+/api/health – backend health check
+
+/aois – load Areas of Interest
+
+/api/email-latest-fc-all – trigger email report generation/sending
+
+State Management & UI Logic
+
+React hooks: useEffect, useState, useRef
+
+Interactive UI panel with a “Send email report” button that:
+
+reflects request state (Sending / Sent / Error)
+
+automatically resets after a timeout
+
+Styling
+
+Base styling via maplibre-gl.css
+
+Custom global styles (index.css)
+
+Lightweight inline styling for UI components
